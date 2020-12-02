@@ -18,22 +18,14 @@ int *getPuzzleInput(int *count) {
     return values;
 }
 
-void sortValues(int *values, int count) {
-    for (int i = 0; i < count - 1; i++) {
-        for (int j = i + 1; j < count; j++) {
-            if (values[i] > values[j]) {
-                int temp = values[i];
-                values[i] = values[j];
-                values[j] = temp;
-            }
-        }
-    }
+int compFunc(const void *a, const void *b) {
+    return *(int *)a - *(int *)b;
 }
 
 int main() {
     int count;
     int *values = getPuzzleInput(&count);
-    sortValues(values, count);
+    qsort(values, count, sizeof(int), compFunc);
     
     int aIndex = 0;
     int bIndex = 1;
