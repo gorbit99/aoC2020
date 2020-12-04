@@ -47,5 +47,7 @@ int main() {
         }
     }
 
+    free(values);
+
     printf("%d\n", values[aIndex] * values[bIndex] * values[cIndex]);
 }

@@ -65,5 +65,10 @@ int main() {
         result *= treeCount;
     }
 
+    for (int i = 0; i < lineCount; i++) {
+        free(input[i]);
+    }
+    free(input);
+
     printf("%ld\n", result);
 }
