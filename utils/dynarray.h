@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <memory.h>
 
-#define createDynarr(type) __createDynarr(sizeof(type))
+#define Dynarr_create(type) __Dynarr_create(sizeof(type))
 
 typedef struct Dynarr {
     void *data;
@@ -13,7 +13,7 @@ typedef struct Dynarr {
     int elemSize;
 } Dynarr;
 
-Dynarr __createDynarr(int elemSize) {
+Dynarr __Dynarr_create(int elemSize) {
     Dynarr result;
     result.capacity = 0;
     result.len = 0;
@@ -22,7 +22,7 @@ Dynarr __createDynarr(int elemSize) {
     return result;
 }
 
-void insertDynarr(Dynarr *dynarr, void *elem) {
+void Dynarr_insert(Dynarr *dynarr, void *elem) {
     if (dynarr->capacity == dynarr->len) {
         if (dynarr->capacity == 0) {
             dynarr->capacity = 1;
@@ -35,14 +35,18 @@ void insertDynarr(Dynarr *dynarr, void *elem) {
     dynarr->len++;
 }
 
-void removeDynarr(Dynarr *dynarr, int index) {
+void Dynarr_remove(Dynarr *dynarr, int index) {
     memmove((char *)dynarr->data + dynarr->elemSize * index,
             (char *)dynarr->data + dynarr->elemSize * (index + 1),
             dynarr->elemSize * (dynarr->len - index - 1));
 }
 
-void freeDynarr(Dynarr *dynarr) {
+void Dynarr_free(Dynarr *dynarr) {
     free(dynarr->data);
+}
+
+void *Dynarr_get(Dynarr *dynarr, int index) {
+    return (void *)((char *)dynarr->data + index * dynarr->elemSize);
 }
 
 #endif
