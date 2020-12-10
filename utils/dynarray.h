@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <memory.h>
 
+
 #define Dynarr_create(type) __Dynarr_create(sizeof(type))
 
 typedef struct Dynarr {
@@ -39,6 +40,7 @@ void Dynarr_remove(Dynarr *dynarr, int index) {
     memmove((char *)dynarr->data + dynarr->elemSize * index,
             (char *)dynarr->data + dynarr->elemSize * (index + 1),
             dynarr->elemSize * (dynarr->len - index - 1));
+    dynarr->len--;
 }
 
 void Dynarr_free(Dynarr *dynarr) {
@@ -47,6 +49,10 @@ void Dynarr_free(Dynarr *dynarr) {
 
 void *Dynarr_get(Dynarr *dynarr, int index) {
     return (void *)((char *)dynarr->data + index * dynarr->elemSize);
+}
+
+void Dynarr_sort(Dynarr *dynarr, int (*cmp)(const void *a, const void *b)) {
+    qsort(dynarr->data, dynarr->len, dynarr->elemSize, cmp);
 }
 
 #endif
