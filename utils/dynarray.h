@@ -55,4 +55,20 @@ void Dynarr_sort(Dynarr *dynarr, int (*cmp)(const void *a, const void *b)) {
     qsort(dynarr->data, dynarr->len, dynarr->elemSize, cmp);
 }
 
+void Dynarr_execute(Dynarr *dynarr, void (*fn)(void *)) {
+    for (int i = 0; i < dynarr->len; i++) {
+        fn((void *)((char *)dynarr->data + i * dynarr->elemSize));
+    }
+}
+
+Dynarr Dynarr_deep_copy(Dynarr *original) {
+    Dynarr copy;
+    copy.elemSize = original->elemSize;
+    copy.len = original->len;
+    copy.data = malloc(copy.len * copy.elemSize);
+    memcpy(copy.data, original->data, copy.len * copy.elemSize);
+    copy.capacity = copy.len;
+    return copy;
+}
+
 #endif

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 typedef struct String {
     char *data;
@@ -15,10 +16,11 @@ String string(char *str) {
     String result;
     result.len = strlen(str);
     result.data = (char *)malloc(sizeof(char) * (result.len + 1));
+    strcpy(result.data, str);
     return result;
 }
 
-String readline() {
+String String_readline() {
     char *buf = (char *)malloc(sizeof(char) * 1);
     int capacity = 1;
     int count = 0;
@@ -38,40 +40,44 @@ String readline() {
     return result;
 }
 
-int scanString(String str, char *format, ...) {
+int String_scan(String *str, char *format, ...) {
     va_list args;
     va_start(args, format);
-    return vsscanf(str.data, format, args);
+    return vsscanf(str->data, format, args);
     va_end(args);
 }
 
-String subString(String str, int begin, int len) {
-    if (begin + len > str.len) {
-        len = str.len - begin;
+String String_substr(String *str, int begin, int len) {
+    if (begin + len > str->len) {
+        len = str->len - begin;
     }
     String result;
     result.len = len;
     result.data = (char *)malloc(sizeof(char) * (len + 1));
-    strncpy(result.data, str.data + begin, len);
+    strncpy(result.data, str->data + begin, len);
     return result;
 }
 
-void freeString(String str) {
-    free(str.data);
+void String_free(String *str) {
+    free(str->data);
 }
 
-void printString(String str) {
-    printf("%s", str.data);
+void String_print(String *str) {
+    printf("%s", str->data);
 }
 
-void concatString(String a, String b) {
-    a.data = (char *)realloc(a.data, sizeof(char) * (a.len + b.len + 1));
-    strcat(a.data, b.data);
-    a.len += b.len;
+void String_print_newline(String *str) {
+    printf("%s\n", str->data);
 }
 
-String copyString(String str) {
-    return string(str.data);
+void String_concat(String *a, String *b) {
+    a->data = (char *)realloc(a->data, sizeof(char) * (a->len + b->len + 1));
+    strcat(a->data, b->data);
+    a->len += b->len;
+}
+
+String String_copy(String *str) {
+    return string(str->data);
 }
 
 #endif
