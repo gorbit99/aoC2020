@@ -61,6 +61,18 @@ void Dynarr_execute(Dynarr *dynarr, void (*fn)(void *)) {
     }
 }
 
+void *Dynarr_top(Dynarr *dynarr) {
+    return Dynarr_get(dynarr, dynarr->len - 1);
+}
+
+void Dynarr_pop(Dynarr *dynarr) {
+    Dynarr_remove(dynarr, dynarr->len - 1);
+}
+
+void Dynarr_push(Dynarr *dynarr, void *elem) {
+    Dynarr_insert(dynarr, elem);
+}
+
 Dynarr Dynarr_deep_copy(Dynarr *original) {
     Dynarr copy;
     copy.elemSize = original->elemSize;
