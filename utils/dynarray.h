@@ -12,16 +12,16 @@ typedef struct Dynarr {
     int len;
     int capacity;
     int elemSize;
+    void (*insert)(struct Dynarr *dynarr, void *elem);
+    void (*remove)(struct Dynarr *dynarr, int index);
+    void (*free)(struct Dynarr *dynarr);
+    void *(*get)(struct Dynarr *dynarr, int index);
+    void (*sort)(struct Dynarr *dynarr, int (*cmp)(const void *a, const void *b));
+    void (*execute)(struct Dynarr *dynarr, void (*fn)(void *));
+    void *(*top)(struct Dynarr *dynarr);
+    void (*pop)(struct Dynarr *dynarr);
+    void (*push)(struct Dynarr *dynarr, void *elem);
 } Dynarr;
-
-Dynarr __Dynarr_create(int elemSize) {
-    Dynarr result;
-    result.capacity = 0;
-    result.len = 0;
-    result.data = NULL;
-    result.elemSize = elemSize;
-    return result;
-}
 
 void Dynarr_insert(Dynarr *dynarr, void *elem) {
     if (dynarr->capacity == dynarr->len) {
@@ -73,14 +73,22 @@ void Dynarr_push(Dynarr *dynarr, void *elem) {
     Dynarr_insert(dynarr, elem);
 }
 
-Dynarr Dynarr_deep_copy(Dynarr *original) {
-    Dynarr copy;
-    copy.elemSize = original->elemSize;
-    copy.len = original->len;
-    copy.data = malloc(copy.len * copy.elemSize);
-    memcpy(copy.data, original->data, copy.len * copy.elemSize);
-    copy.capacity = copy.len;
-    return copy;
+Dynarr __Dynarr_create(int elemSize) {
+    Dynarr result;
+    result.capacity = 0;
+    result.len = 0;
+    result.data = NULL;
+    result.elemSize = elemSize;
+    result.insert = Dynarr_insert;
+    result.remove = Dynarr_remove;
+    result.free = Dynarr_free;
+    result.get = Dynarr_get;
+    result.sort = Dynarr_sort;
+    result.execute = Dynarr_execute;
+    result.top = Dynarr_top;
+    result.pop = Dynarr_pop;
+    result.push = Dynarr_push;
+    return result;
 }
 
 #endif
