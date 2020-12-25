@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <memory.h>
 
-
 #define Dynarr_create(type) __Dynarr_create(sizeof(type))
 
 typedef struct Dynarr {
@@ -24,7 +23,7 @@ typedef struct Dynarr {
 } Dynarr;
 
 void Dynarr_insert(Dynarr *dynarr, void *elem) {
-    if (dynarr->capacity == dynarr->len) {
+if (dynarr->capacity == dynarr->len) {
         if (dynarr->capacity == 0) {
             dynarr->capacity = 1;
         } else {
